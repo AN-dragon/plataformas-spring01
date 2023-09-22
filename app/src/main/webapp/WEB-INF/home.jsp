@@ -7,6 +7,7 @@
     </head>
     <body>
         <h1>Olá Spring!!!</h1>
+        <a href="/plataforma/list">Plataformas</a>
     </body>
 </html>
 

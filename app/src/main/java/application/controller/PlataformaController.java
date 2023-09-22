@@ -1,5 +1,7 @@
 package application.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,4 +39,57 @@ public class PlataformaController {
 
         return "redirect:/plataforma/list";
     }
+
+    @RequestMapping("/update")
+    public String update(Model model, @RequestParam("id") int id) {
+        Optional<Plataforma> plataforma = plataformaRepo.findById(id);
+
+        if(plataforma.isPresent()) {
+            model.addAttribute("plataforma", plataforma.get());
+            return "/plataforma/update";
+        }
+
+        return "redirect:/plataforma/list";
+    }
+
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String update(
+        @RequestParam("id") int id,
+        @RequestParam("nome") String nome,
+        @RequestParam("fornecedor") String fornecedor
+        ) {
+            Optional<Plataforma> plataforma = plataformaRepo.findById(id);
+
+            if(plataforma.isPresent()) {
+                plataforma.get().setNome(nome);
+                plataforma.get().setFornecedor(fornecedor);
+
+                plataformaRepo.save(plataforma.get());
+            }
+
+            return "redirect:/plataforma/list";
+        }
+
+
+    @RequestMapping("/delete")
+    public String delete(Model model, @RequestParam("id") int id) {
+        Optional<Plataforma> plataforma = plataformaRepo.findById(id);
+
+        if(plataforma.isPresent()) {
+            model.addAttribute("plataforma", plataforma.get());
+            return "/plataforma/delete";
+        }
+
+        return "redirect:/plataforma/list";
+    }
+    
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public String delete(@RequestParam("id") int id) {
+        plataformaRepo.deleteById(id);
+
+        return "redirect:/plataforma/list";
+    }
+    
 }
